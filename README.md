@@ -39,7 +39,7 @@ $ npm run start:prod
 
 # with docker
 $ cd docker
-$ docker-compose up app
+$ docker-compose up -d
 ```
 
 ### API Documentation
