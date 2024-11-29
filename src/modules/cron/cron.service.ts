@@ -6,9 +6,9 @@ import { getStartAndEndOfCurrentDay } from 'src/utils/date';
 @Injectable()
 export class CronService {
   private readonly logger = new Logger(CronService.name);
-  constructor(@Inject('QueueService') private queueService: QueueService) {}
+  constructor(@Inject(QueueService) private queueService: QueueService) {}
 
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.EVERY_5_MINUTES)
   async getProbabitionApiData() {
     try {
       const { startOfDay, endOfDay } = getStartAndEndOfCurrentDay();

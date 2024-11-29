@@ -21,7 +21,7 @@ export class CreateCampaignReportsTable1732780279369
           },
           {
             name: 'campaign_id',
-            type: 'integer',
+            type: 'uuid',
           },
           {
             name: 'adgroup',
@@ -29,7 +29,7 @@ export class CreateCampaignReportsTable1732780279369
           },
           {
             name: 'adgroup_id',
-            type: 'integer',
+            type: 'uuid',
           },
           {
             name: 'ad',
@@ -37,11 +37,11 @@ export class CreateCampaignReportsTable1732780279369
           },
           {
             name: 'ad_id',
-            type: 'integer',
+            type: 'uuid',
           },
           {
             name: 'client_id',
-            type: 'integer',
+            type: 'uuid',
           },
           {
             name: 'event_name',
@@ -49,7 +49,7 @@ export class CreateCampaignReportsTable1732780279369
           },
           {
             name: 'event_time',
-            type: 'timestamp',
+            type: 'date',
           },
           {
             name: 'createdAt',
@@ -71,9 +71,5 @@ export class CreateCampaignReportsTable1732780279369
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropTable('campaign_reports');
-    await queryRunner.dropUniqueConstraint(
-      'campaign_reports',
-      'UQ_campaign_reports',
-    );
   }
 }

@@ -2,8 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class InitiateFetchDto {
   @ApiProperty()
-  from_date: Date;
+  from_date: string;
 
   @ApiProperty()
-  to_date: Date;
+  to_date: string;
 }

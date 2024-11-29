@@ -1,7 +1,7 @@
 export class AddFetchTaskDto {
-  from_date: Date;
+  from_date: string;
 
-  to_date: Date;
+  to_date: string;
 
-  isUserInitiate?: boolean = false;
+  is_user_initiated?: boolean = false;
 }

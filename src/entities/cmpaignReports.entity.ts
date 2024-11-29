@@ -9,11 +9,6 @@ import {
 import { Exclude } from 'class-transformer';
 
 @Entity('campaign_reports')
-// @Unique('campaign_reports_unique_constraint', [
-//   'event_time',
-//   'client_id',
-//   'event_name',
-// ])
 export class CampaignReports extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -21,28 +16,28 @@ export class CampaignReports extends BaseEntity {
   @Column('varchar')
   campaign: string;
 
-  @Column('int')
-  campaign_id: number;
+  @Column('uuid')
+  campaign_id: string;
 
   @Column('varchar')
   adgroup: string;
 
-  @Column('int')
-  adgroup_id: number;
+  @Column('uuid')
+  adgroup_id: string;
 
   @Column('varchar')
   ad: string;
 
-  @Column('int')
-  ad_id: number;
+  @Column('uuid')
+  ad_id: string;
 
-  @Column('int')
-  client_id: number;
+  @Column('uuid')
+  client_id: string;
 
   @Column('varchar')
   event_name: string;
 
-  @Column('int')
+  @Column('date')
   event_time: Date;
 
   @CreateDateColumn()

@@ -4,15 +4,20 @@ import { BullModule } from '@nestjs/bullmq';
 import { join } from 'path';
 
 @Module({
-  providers: [QueueService],
   imports: [
     BullModule.registerQueue({
       name: 'fetchQueue',
       processors: [
-        { path: join(__dirname, 'processor.js'), useWorkerThreads: true },
+        {
+          path: require('url').pathToFileURL(
+            join(process.cwd(), 'processor.js'),
+          ),
+          useWorkerThreads: true,
+        },
       ],
     }),
   ],
+  providers: [QueueService],
   exports: [QueueService],
 })
 export class QueueModule {}

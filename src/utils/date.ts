@@ -1,3 +1,9 @@
+const formatDate = (date: Date) => {
+  // TO YYYY-MM-DD HH:00:00
+  const pad = (num) => String(num).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:00:00`;
+};
+
 const getStartAndEndOfCurrentDay = () => {
   const now = new Date();
 
@@ -15,7 +21,10 @@ const getStartAndEndOfCurrentDay = () => {
     999,
   );
 
-  return { startOfDay, endOfDay };
+  return {
+    startOfDay: formatDate(startOfDay),
+    endOfDay: formatDate(endOfDay),
+  };
 };
 
 export { getStartAndEndOfCurrentDay };

@@ -13,14 +13,14 @@ export class ReportsController {
     private queueService: QueueService,
   ) {}
 
-  @Get()
-  @ApiResponse({
-    status: 200,
-    // type:
-  })
-  async aggregateEventData(@Body() aggregateEventData: AggregateEventDataDto) {
-    //
-  }
+  // @Get()
+  // @ApiResponse({
+  //   status: 200,
+  //   type:
+  // })
+  // async aggregateEventData(@Body() aggregateEventData: AggregateEventDataDto) {
+
+  // }
 
   @Post()
   @ApiResponse({
@@ -28,9 +28,12 @@ export class ReportsController {
     description: 'Fetch request has been successfully queued',
   })
   async initiateFetch(@Body() initiateFetch: InitiateFetchDto) {
+    // date format: YYYY-MM-DD HH:00:00
     await this.queueService.addFetchTask(
-      { isUserInitiate: true, ...initiateFetch },
+      { is_user_initiated: true, ...initiateFetch },
       2,
     );
+
+    return { ok: 'Fetch request has been successfully queued' };
   }
 }
