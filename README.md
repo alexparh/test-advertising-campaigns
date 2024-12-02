@@ -25,6 +25,13 @@ $ docker-compose up db
 $ npm migration:run
 ```
 
+### Run queue
+
+```bash
+$ cd docker
+$ docker-compose up queue
+```
+
 ### Compile and run the project
 
 ```bash
