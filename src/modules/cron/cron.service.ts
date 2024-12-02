@@ -8,7 +8,7 @@ export class CronService {
   private readonly logger = new Logger(CronService.name);
   constructor(@Inject(QueueService) private queueService: QueueService) {}
 
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.EVERY_MINUTE)
   async getProbabitionApiData() {
     try {
       const { startOfDay, endOfDay } = getStartAndEndOfCurrentDay();
@@ -20,12 +20,11 @@ export class CronService {
         },
         1,
       );
-
-      this.logger.log(
-        `Fetch cron added to queue: ${Date.now().toLocaleString()}`,
-      );
     } catch (error) {
-      this.logger.error('Error while adding fetch cron to queue', error);
+      this.logger.error({
+        message: 'Error while adding fetch cron to queue',
+        error,
+      });
     }
   }
 }

@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Queue } from 'bullmq';
 import { InjectQueue } from '@nestjs/bullmq';
 import { AddFetchTaskDto } from './dto/addFetchTask.dto';
 
 @Injectable()
 export class QueueService {
+  private readonly logger = new Logger(QueueService.name);
   constructor(@InjectQueue('fetchQueue') private fetchQueue: Queue) {}
 
   async addFetchTask(taskData: AddFetchTaskDto, priority: number) {
@@ -12,6 +13,10 @@ export class QueueService {
       priority,
       removeOnComplete: true,
     });
-    console.log(job.id);
+
+    this.logger.log({
+      message: `${taskData.is_user_initiated ? 'User intiated' : 'Cron'} job queued`,
+      id: job.id,
+    });
   }
 }

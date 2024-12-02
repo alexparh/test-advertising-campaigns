@@ -37,6 +37,7 @@ services:
     network_mode: 'host'
     volumes:
       - ../src:/app/src
+      - ../processor.js:/app/processor.js
       - ../.env:/app/.env
       - ../package.json:/app/package.json
       - ../node_modules:/app/node_modules

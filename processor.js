@@ -1,10 +1,12 @@
 require('dotenv').config();
 const { Client } = require('pg');
+const pino = require('pino');
 
 const event_names = ['install', 'purchase'];
 const take = 100;
 
 const {
+  NODE_ENV,
   DB_HOST,
   DB_PORT,
   DB_USERNAME,
@@ -14,6 +16,8 @@ const {
   PROBABITION_API_URL,
 } = process.env;
 
+const isProduction = NODE_ENV == 'production';
+
 const dbConnectionSettings = {
   user: DB_USERNAME,
   host: DB_HOST,
@@ -21,6 +25,27 @@ const dbConnectionSettings = {
   password: DB_PASSWORD,
   port: DB_PORT,
 };
+
+const logger = pino(
+  {
+    level: isProduction ? 'info' : 'debug',
+    timestamp: pino.stdTimeFunctions.isoTime,
+    transport: isProduction
+      ? undefined
+      : {
+          target: 'pino-pretty',
+          options: {
+            colorize: true,
+            translateTime: 'SYS:standard',
+            ignore: 'pid,hostname',
+          },
+        },
+  },
+  pino.destination({
+    dest: isProduction ? './logs/processor.log' : 1,
+    sync: false,
+  }),
+);
 
 function generateUrl(params) {
   const url = new URL(PROBABITION_API_URL);
@@ -42,7 +67,7 @@ async function fetchData(url) {
 
     return res.json();
   } catch (error) {
-    console.error(`Error fetching data (url: ${url}):`, error);
+    logger.error({ message: 'Error fetching data', url, error });
   }
 }
 
@@ -106,9 +131,12 @@ module.exports = async (job) => {
   const { from_date, to_date, is_user_initiated } = job.data;
 
   const message = is_user_initiated ? `User initiated` : `Cron`;
-  console.log(
-    `${message} data fetch started; dates:${from_date} - ${to_date}, id:${job.id}`,
-  );
+
+  logger.info({
+    message: `${message} data fetch started`,
+    date_range: `${from_date} - ${to_date}`,
+    id: job.id,
+  });
 
   const db = new Client(dbConnectionSettings);
 
@@ -117,6 +145,7 @@ module.exports = async (job) => {
 
     for (const event_name of event_names) {
       let url = generateUrl({ from_date, to_date, event_name, take });
+      let counter = 0;
 
       while (url) {
         const res = await fetchData(url);
@@ -127,17 +156,26 @@ module.exports = async (job) => {
 
         const dataObj = csvToObject(res.data.csv);
         await insertData(dataObj, db);
+        counter += dataObj.length;
+
+        logger.info({
+          message: `${counter} rows inserted`,
+          event_name,
+          id: job.id,
+        });
 
         url = res.data.pagination ? res.data.pagination.next : null;
       }
     }
   } catch (error) {
-    console.error(`Processing error (id:${job.id}):`, error);
+    logger.error({ message: 'Processing error', id: job.id, error });
   } finally {
     db.end();
   }
 
-  console.log(
-    `${message} data fetch successfully ended; dates: ${from_date} - ${to_date}, id:${job.id}`,
-  );
+  logger.info({
+    message: `${message} data fetch successfully ended`,
+    date_range: `${from_date} - ${to_date}`,
+    id: job.id,
+  });
 };

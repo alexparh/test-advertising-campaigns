@@ -6,6 +6,7 @@ import { CronModule } from './modules/cron/cron.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { BullModule } from '@nestjs/bullmq';
 import { QueueModule } from './modules/queue/queue.module';
+import { LoggerModule } from 'nestjs-pino';
 import config from './config';
 
 @Module({
@@ -13,6 +14,16 @@ import config from './config';
     ConfigModule.forRoot({
       load: [config],
       isGlobal: true,
+    }),
+    LoggerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async () => {
+        const { logger } = config();
+        return {
+          pinoHttp: logger,
+        };
+      },
+      inject: [ConfigService],
     }),
     BullModule.forRootAsync({
       imports: [ConfigModule],
