@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import config from './config';
+import { ValidationPipe } from '@nestjs/common';
 
 const {
   system: { port },
@@ -9,6 +10,8 @@ const {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Advertisement campaign reports')

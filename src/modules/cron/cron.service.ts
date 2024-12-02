@@ -8,7 +8,7 @@ export class CronService {
   private readonly logger = new Logger(CronService.name);
   constructor(@Inject(QueueService) private queueService: QueueService) {}
 
-  @Cron(CronExpression.EVERY_5_MINUTES)
+  @Cron(CronExpression.EVERY_HOUR)
   async getProbabitionApiData() {
     try {
       const { startOfDay, endOfDay } = getStartAndEndOfCurrentDay();

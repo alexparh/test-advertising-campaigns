@@ -1,6 +1,6 @@
 ## Description
 
-Simple google drive api (google auth, file and folder structure, view/edit user access)
+Advertisement campaign reports
 
 ## Project setup
 

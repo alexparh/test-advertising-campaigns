@@ -133,7 +133,6 @@ module.exports = async (job) => {
     }
   } catch (error) {
     console.error(`Processing error (id:${job.id}):`, error);
-    throw error;
   } finally {
     db.end();
   }

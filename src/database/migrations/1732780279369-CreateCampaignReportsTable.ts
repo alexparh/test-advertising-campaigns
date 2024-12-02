@@ -49,7 +49,7 @@ export class CreateCampaignReportsTable1732780279369
           },
           {
             name: 'event_time',
-            type: 'date',
+            type: 'timestamp',
           },
           {
             name: 'createdAt',

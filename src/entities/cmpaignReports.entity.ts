@@ -4,7 +4,6 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  Unique,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
@@ -37,7 +36,7 @@ export class CampaignReports extends BaseEntity {
   @Column('varchar')
   event_name: string;
 
-  @Column('date')
+  @Column('timestamp')
   event_time: Date;
 
   @CreateDateColumn()

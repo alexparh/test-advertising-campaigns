@@ -8,9 +8,10 @@ export class QueueService {
   constructor(@InjectQueue('fetchQueue') private fetchQueue: Queue) {}
 
   async addFetchTask(taskData: AddFetchTaskDto, priority: number) {
-    await this.fetchQueue.add('fetch-task', taskData, {
+    const job = await this.fetchQueue.add('fetch-task', taskData, {
       priority,
       removeOnComplete: true,
     });
+    console.log(job.id);
   }
 }
